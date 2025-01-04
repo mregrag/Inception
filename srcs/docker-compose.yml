@@ -1,0 +1,52 @@
+services:
+  mariadb:
+    image:
+    build:
+
+    networks:
+        - inception
+    env_file:
+      - .env
+
+    restart: always
+
+  wordpress:
+    image:
+    build:
+
+    networks:
+        - inception
+    env_file:
+      - .env
+
+    restart: always
+
+  nginix:
+    image:
+    build:
+
+    networks:
+        - inception
+    env_file:
+      - .env
+
+    restart: always
+    
+networks:
+  inception:
+    driver: bridge
+
+volumes:
+  wordpress:
+    driver: local
+    driver_opts:
+      device: ${VOLUME_PATH}/wordpress
+      type: none
+      o: bind
+
+  mariadb:
+    driver: local
+    driver_opts:
+      device: ${VOLUME_PATH}/mariadb
+      type: none
+      o: bind
