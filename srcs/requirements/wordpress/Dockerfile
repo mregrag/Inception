@@ -1,25 +1,24 @@
-FROM debian:bullseye
+FROM alpine:3.16
 
-RUN apt-get update && apt-get -y install \
-    curl \
-    php7.4-fpm \
-    php7.4-mysqli \
-    mariadb-client
+RUN apk add --no-cache \
+        php8-fpm \
+        php8-mysqli \
+        mariadb-client
 
-RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
-    && chmod +x wp-cli.phar \
-    && mv wp-cli.phar /usr/local/bin/wp
+RUN mkdir -p /run/php && \
+    sed -i 's/listen = 127.0.0.1:9000/listen = 9000/g' /etc/php8/php-fpm.d/www.conf
 
-COPY conf/www.conf /etc/php/7.4/fpm/pool.d/
+# Install WP-CLI
+RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+    chmod +x wp-cli.phar && \
+    mv wp-cli.phar /usr/local/bin/wp
 
-RUN mkdir -p /run/php
-RUN chmod 755 /run/php
+# Set working directory
+WORKDIR /var/www/html
 
-COPY ./tools/wp.sh /usr/local/bin/wp.sh
-RUN chmod +x /usr/local/bin/wp.sh
+COPY ./tools/setup.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/setup.sh
 
 EXPOSE 9000
 
-WORKDIR /var/www/html/
-
-ENTRYPOINT [ "/usr/local/bin/wp.sh" ]
+CMD ["/usr/local/bin/setup.sh"]

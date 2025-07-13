@@ -1,13 +1,18 @@
-FROM debian:bullseye
+FROM alpine:3.16
 
-RUN apt-get update && apt-get install -y nginx openssl curl
+RUN apk update && apk add --no-cache nginx openssl
 
-COPY conf/default /etc/nginx/sites-available/default
-RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+# Create directories
+RUN mkdir -p /etc/nginx/ssl /var/run/nginx
 
-COPY tools/ssl_setup.sh /usr/local/bin/ssl_setup.sh
-RUN chmod +x /usr/local/bin/ssl_setup.sh
+# Generate self-signed SSL certificate
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout /etc/nginx/ssl/nginx.key \
+    -out /etc/nginx/ssl/nginx.crt \
+    -subj "/C=FR/ST=IDF/L=Paris/O=42/OU=42Paris/CN=mregrag.42.fr"
+
+COPY ./conf/nginx.conf /etc/nginx/http.d/default.conf
 
 EXPOSE 443
 
-CMD ["/usr/local/bin/ssl_setup.sh"]
+CMD ["nginx", "-g", "daemon off;"]
