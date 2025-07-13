@@ -1,19 +1,13 @@
-# requirements/nginx/Dockerfile
 FROM debian:bullseye
 
-RUN apt-get update && apt-get install -y \
-    nginx \
-    openssl \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y nginx openssl curl
 
-# Generate SSL certificate
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-    -keyout /etc/ssl/private/nginx-selfsigned.key \
-    -out /etc/ssl/certs/nginx-selfsigned.crt \
-    -subj "/C=FR/ST=IDF/L=Paris/O=42/CN=${DOMAIN_NAME}"
+COPY conf/default /etc/nginx/sites-available/default
+RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
-COPY conf/nginx.conf /etc/nginx/conf.d/default.conf
+COPY tools/ssl_setup.sh /usr/local/bin/ssl_setup.sh
+RUN chmod +x /usr/local/bin/ssl_setup.sh
 
 EXPOSE 443
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/usr/local/bin/ssl_setup.sh"]

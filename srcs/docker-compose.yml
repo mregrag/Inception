@@ -1,69 +1,60 @@
-version: '3.8'
+networks:
+     inception_network:
+        name:  inception_network
+        driver: bridge
 
 services:
-  mariadb:
-    build:
-      context: requirements/mariadb
-      dockerfile: Dockerfile
-      args:
-        - DB_NAME=${DB_NAME}
-        - DB_USER=${DB_USER}
-        - DB_PASSWORD=${DB_PASSWORD}
-        - DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
-    container_name: mariadb
-    volumes:
-      - mariadb_data:/var/lib/mysql
-    networks:
-      - inception_network
-    env_file:
-      - .env
-    restart: unless-stopped
+    nginx:
+        container_name: nginx
+        build: ./requirements/nginx
+        image: nginx
+        ports:
+         - 8443:443
+        volumes:
+         - wordpress_data:/var/www/html
+        restart: always
+        networks:
+         -  inception_network
 
-  wordpress:
-    build:
-      context: requirements/wordpress
-      dockerfile: Dockerfile
-    container_name: wordpress
-    volumes:
-      - wordpress_data:/var/www/html
-    networks:
-      - inception_network
-    env_file:
-      - .env
-    depends_on:
-      - mariadb
-    restart: unless-stopped
 
-  nginx:
-    build:
-      context: requirements/nginx
-      dockerfile: Dockerfile
-    container_name: nginx
-    ports:
-      - "443:443"
-    volumes:
-      - wordpress_data:/var/www/html
-    networks:
-      - inception_network
-    depends_on:
-      - wordpress
-    restart: unless-stopped
+    mariadb:
+         container_name: mariadb
+         build:
+            context: ./requirements/mariadb
+         image: mariadb
+         volumes:
+          - mariadb_data:/var/lib/mysql
+         restart: always
+         networks:
+          -  inception_network
+         env_file:
+          - .env
 
-networks:
-  inception_network:
-    driver: bridge
+    wordpress:
+        container_name: wordpress
+        build: ./requirements/wordpress
+        image: wordpress
+        depends_on:
+         - mariadb
+        volumes:
+         - wordpress_data:/var/www/html
+        restart: always
+        networks:
+         -  inception_network
+        env_file:
+          - .env
 
 volumes:
-  wordpress_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: /home/${USER}/data/wordpress
-      o: bind
-  mariadb_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: /home/${USER}/data/mariadb
-      o: bind
+    mariadb_data:
+        driver: local
+        driver_opts:
+            type: none
+            device: /home/mregrag/data/mariadb
+            o: bind
 
+    wordpress_data:
+        driver: local
+        driver_opts:
+            type: none
+            device: /home/mregrag/data/wordpress
+            o: bind

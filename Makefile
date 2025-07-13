@@ -1,34 +1,54 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/01/03 23:29:25 by mregrag           #+#    #+#              #
-#    Updated: 2025/01/05 23:26:11 by mregrag          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+GREEN = \033[0;32m
+YELLOW = \033[0;33m
+RESET = \033[0m
 
-NAME = inception
+DOCKER_COMPOSE = srcs/docker-compose.yml
 DATA_PATH = /home/$(USER)/data
+ENV_FILE = srcs/.env
 
-all: setup build
+all: setup build up
 
 setup:
+	@echo "$(GREEN)Setting up data directories...$(RESET)"
 	@mkdir -p $(DATA_PATH)/wordpress
 	@mkdir -p $(DATA_PATH)/mariadb
+	@chmod 777 $(DATA_PATH)/wordpress
+	@chmod 777 $(DATA_PATH)/mariadb
+	@echo "$(YELLOW)Note: You may need to add the following to /etc/hosts manually:$(RESET)"
+	@echo "$(YELLOW)127.0.0.1 $(USER).42.fr$(RESET)"
 
 build:
-	@docker-compose -f srcs/docker-compose.yml up --build -d
+	@echo "$(GREEN)Building Docker images...$(RESET)"
+	@docker-compose -f $(DOCKER_COMPOSE) build
 
-clean:
-	@docker-compose -f srcs/docker-compose.yml down
+up:
+	@echo "$(GREEN)Starting containers...$(RESET)"
+	@docker-compose -f $(DOCKER_COMPOSE) up -d
 
-fclean: clean
+down:
+	@echo "$(GREEN)Stopping containers...$(RESET)"
+	@docker-compose -f $(DOCKER_COMPOSE) down
+
+clean: down
+	@echo "$(GREEN)Cleaning up containers and volumes...$(RESET)"
+	@docker-compose -f $(DOCKER_COMPOSE) down -v
+
+clean-data:
+	@echo "$(GREEN)Cleaning data directories with proper permissions...$(RESET)"
+	@docker run --rm -v $(DATA_PATH)/mariadb:/data debian:bullseye chmod -R 777 /data
+	@docker run --rm -v $(DATA_PATH)/wordpress:/data debian:bullseye chmod -R 777 /data
+	@rm -rf $(DATA_PATH)/mariadb/* $(DATA_PATH)/wordpress/* 2>/dev/null || true
+
+fclean: clean clean-data
+	@echo "$(GREEN)Removing all images and volumes...$(RESET)"
 	@docker system prune -af
-	@sudo rm -rf $(DATA_PATH)
+	@rm -rf $(DATA_PATH) 2>/dev/null || true
 
 re: fclean all
 
-.PHONY: all setup build clean fclean re
+ps:
+	@docker-compose -f $(DOCKER_COMPOSE) ps
+
+logs:
+	@docker-compose -f $(DOCKER_COMPOSE) logs
+

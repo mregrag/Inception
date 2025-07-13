@@ -1,35 +1,25 @@
-# requirements/wordpress/Dockerfile
 FROM debian:bullseye
 
-RUN apt-get update && apt-get install -y \
-    php7.4-fpm \
-    php7.4-mysql \
-    php7.4-curl \
-    php7.4-gd \
-    php7.4-intl \
-    php7.4-mbstring \
-    php7.4-soap \
-    php7.4-xml \
-    php7.4-zip \
-    wget \
+RUN apt-get update && apt-get -y install \
     curl \
-    && rm -rf /var/lib/apt/lists/*
+    php7.4-fpm \
+    php7.4-mysqli \
+    mariadb-client
 
-# Configure PHP-FPM
-RUN sed -i 's/listen = \/run\/php\/php7.4-fpm.sock/listen = 9000/' \
-    /etc/php/7.4/fpm/pool.d/www.conf
-
-# Install WP-CLI
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
     && chmod +x wp-cli.phar \
     && mv wp-cli.phar /usr/local/bin/wp
 
-WORKDIR /var/www/html
+COPY conf/www.conf /etc/php/7.4/fpm/pool.d/
 
-COPY tools/wp-setup.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/wp-setup.sh
+RUN mkdir -p /run/php
+RUN chmod 755 /run/php
+
+COPY ./tools/wp.sh /usr/local/bin/wp.sh
+RUN chmod +x /usr/local/bin/wp.sh
 
 EXPOSE 9000
 
-CMD ["/usr/sbin/php-fpm7.4", "-F"]
+WORKDIR /var/www/html/
 
+ENTRYPOINT [ "/usr/local/bin/wp.sh" ]
