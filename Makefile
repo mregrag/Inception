@@ -34,9 +34,14 @@ ps:
 logs:
 	@docker-compose -f $(DOCKER_COMPOSE_FILE) logs
 
+
 sync:
 	rsync -avz --delete -e "ssh -p 4242" \
-	      ~/vm_inception/ \
-	      mregrag@10.11.100.48:/home/mregrag/Desktop/Inception/
+		~/Desktop/Inception/ \
+		mregrag@localhost:/home/mregrag/Desktop/Inception/
+
+push:
+	scp -P 4242 -r /Users/mregrag/Desktop/Inception mregrag@localhost:/home/mregrag/Desktop
+
 re: fclean all
 

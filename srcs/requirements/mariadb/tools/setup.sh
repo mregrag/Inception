@@ -1,6 +1,5 @@
 #!/bin/sh
 
-# Check if MariaDB is already initialized
 if [ -d "/var/lib/mysql/mysql" ]; then
     echo "MariaDB database is already initialized."
     exec mysqld --user=mysql
@@ -11,7 +10,6 @@ fi
 echo "Initializing MariaDB data directory..."
 mysql_install_db --user=mysql --datadir=/var/lib/mysql > /dev/null
 
-# Start MariaDB temporarily to configure it
 echo "Starting MariaDB to configure..."
 mysqld --user=mysql --bootstrap << EOF
 USE mysql;
@@ -30,6 +28,5 @@ EOF
 
 echo "MariaDB configuration completed."
 
-# Start MariaDB server
 echo "Starting MariaDB server..."
 exec mysqld --user=mysql
