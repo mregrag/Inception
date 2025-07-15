@@ -28,6 +28,18 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
         --user_pass=${WORDPRESS_USER_PASSWORD} \
         --role=author \
         --allow-root
+
+    # Add Redis configuration to wp-config.php
+    wp config set WP_REDIS_HOST "${REDIS_HOST}" --allow-root
+    wp config set WP_REDIS_PORT "${REDIS_PORT}" --allow-root
+    wp config set WP_REDIS_PASSWORD "${REDIS_PASSWORD}" --allow-root
+    wp config set WP_CACHE true --allow-root
+    wp config set WP_REDIS_CLIENT phpredis --allow-root
+
+    wp plugin activate redis-cache --allow-root
+    wp redis enable --allow-root
+
+    echo "WordPress Redis cache configured successfully!"
 fi
 
 chown -R nobody:nobody /var/www/html
