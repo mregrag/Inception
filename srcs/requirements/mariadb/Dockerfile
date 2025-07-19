@@ -1,16 +1,12 @@
-FROM alpine:3.16
+FROM debian:bullseye
 
-RUN apk update && apk add --no-cache mariadb mariadb-client
+RUN apt-get update && apt-get install -y mariadb-server
 
-# Create directories
-RUN mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld
+# COPY ./conf/my.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
 
-# Copy configuration files
-COPY ./conf/my.cnf /etc/my.cnf.d/mariadb-server.cnf
-
-COPY ./tools/setup.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
+COPY ./tools/setup.sh /usr/local/bin/setup.sh
+RUN chmod +x /usr/local/bin/setup.sh
 
 EXPOSE 3306
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/setup.sh"]

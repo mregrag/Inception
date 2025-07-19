@@ -1,11 +1,5 @@
-FROM alpine:3.16
+FROM debian:bullseye
 
-RUN apk update && apk add --no-cache redis && \
-    mkdir -p /data
+RUN apt-get update && apt-get install -y redis-server
 
-COPY ./conf/redis.conf /etc/redis/redis.conf
-
-EXPOSE 6379
-
-# Use Redis server as PID 1 (following best practices)
-CMD ["redis-server", "/etc/redis/redis.conf"]
+CMD ["redis-server", "--protected-mode", "no"]

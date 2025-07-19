@@ -1,47 +1,34 @@
-# Inception Project Makefile
-
-NAME = inception
-DOCKER_COMPOSE_FILE = srcs/docker-compose.yml
-
-all: up
+DOCKER_COMPOSE = srcs/docker-compose.yml
 
 up:
-	@printf "Starting $(NAME)...\n"
 	@mkdir -p /home/$(USER)/data/wordpress
 	@mkdir -p /home/$(USER)/data/mariadb
-	@docker-compose -f $(DOCKER_COMPOSE_FILE) up -d --build
-
+	@docker-compose -f $(DOCKER_COMPOSE) up -d --build
 down:
-	@printf "Stopping $(NAME)...\n"
-	@docker-compose -f $(DOCKER_COMPOSE_FILE) down
+	@docker-compose -f $(DOCKER_COMPOSE) down
 
 build:
-	@echo "$(GREEN)Building Docker images...$(RESET)"
 	@docker-compose -f $(DOCKER_COMPOSE) build
 
 clean: down
-	@printf "Cleaning $(NAME)...\n"
 	@docker system prune -a -f
-	@docker volume rm $$(docker volume ls -q) 2>/dev/null || true
+	@docker volume rm $$(docker volume ls -q)
 
 fclean: clean
-	@printf "Full cleaning $(NAME)...\n"
-	@sudo rm -rf /home/$(USER)/data
+	@sudo  rm -rf /home/$(USER)/data
 
 ps:
-	@docker-compose -f $(DOCKER_COMPOSE_FILE) ps
+	@docker-compose -f $(DOCKER_COMPOSE) ps
 
 logs:
-	@docker-compose -f $(DOCKER_COMPOSE_FILE) logs
-
+	@docker-compose -f $(DOCKER_COMPOSE) logs
 
 sync:
 	rsync -avz --delete -e "ssh -p 4242" \
 		~/Desktop/Inception/ \
-		mregrag@localhost:/home/mregrag/Desktop/Inception/
+		mregrag@10.13.100.245:/home/mregrag/Desktop/Inception/
 
 push:
-	scp -P 4242 -r /Users/mregrag/Desktop/Inception mregrag@localhost:/home/mregrag/Desktop
+	scp -P 4242 -r /Users/mregrag/Desktop/Inception/ mregrag@10.13.100.245:/home/mregrag/Desktop
 
-re: fclean all
-
+re: fclean up
