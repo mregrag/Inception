@@ -41,7 +41,6 @@ services:
     env_file:
       - .env
     restart: always
-
   
   redis:
     container_name: redis
@@ -51,8 +50,43 @@ services:
       - inception
     restart: always
 
+  ftp:
+    container_name: ftp
+    build:
+      context: ./requirements/bonus/ftp
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - inception
+    ports:
+      - "21:21"
+      - "21000-21010:21000-21010"
+    env_file:
+      - .env
+    restart: always
 
 
+  static_website:
+    container_name: static_website
+    build:
+      context: ./requirements/bonus/static_website
+    networks:
+      - inception
+    ports:
+      - "8081:80"
+    restart: always
+
+  adminer:
+    container_name: adminer
+    build:
+      context: ./requirements/bonus/adminer
+    ports:
+      - "8080:8080"
+    networks:
+      - inception
+    depends_on:
+      - mariadb
+    restart: always
 
 networks:
   inception:
@@ -71,4 +105,3 @@ volumes:
       type: none
       device: /home/${USER}/data/mariadb
       o: bind
-
