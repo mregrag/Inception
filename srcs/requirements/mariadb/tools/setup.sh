@@ -1,8 +1,10 @@
 #!/bin/bash
 
+DB_PASSWORD=$(cat /run/secrets/db_password)
+
 service mariadb start
 mariadb -e "CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE}"
-mariadb -e "CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';"
+mariadb -e "CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';"
 mariadb -e "GRANT ALL ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';"
 mariadb -e "FLUSH PRIVILEGES;"
 mysqladmin shutdown -u root

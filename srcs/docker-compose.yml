@@ -28,6 +28,10 @@ services:
       - redis
     env_file:
       - .env
+    secrets:
+      - db_password
+      - wp_admin_password
+      - wp_user_password
     restart: always
 
   mariadb:
@@ -40,6 +44,9 @@ services:
       - inception
     env_file:
       - .env
+    secrets:
+      - db_password
+      - db_admin_password
     restart: always
   
   redis:
@@ -63,8 +70,9 @@ services:
       - "21000-21010:21000-21010"
     env_file:
       - .env
+    secrets:
+      - ftp_password
     restart: always
-
 
   static_website:
     container_name: static_website
@@ -105,3 +113,15 @@ volumes:
       type: none
       device: /home/${USER}/data/mariadb
       o: bind
+
+secrets:
+  db_password:
+    file: ../secrets/db_password.txt
+  db_admin_password:
+    file: ../secrets/db_admin_password.txt
+  wp_admin_password:
+    file: ../secrets/wp_admin_password.txt
+  wp_user_password:
+    file: ../secrets/wp_user_password.txt
+  ftp_password:
+    file: ../secrets/ftp_password.txt

@@ -3,7 +3,6 @@ DOCKER_COMPOSE = srcs/docker-compose.yml
 up:
 	@mkdir -p /home/$(USER)/data/wordpress
 	@mkdir -p /home/$(USER)/data/mariadb
-	@mkdir -p /home/$(USER)/data/portainer
 	@docker-compose -f $(DOCKER_COMPOSE) up -d --build
 down:
 	@docker-compose -f $(DOCKER_COMPOSE) down
@@ -26,10 +25,10 @@ logs:
 
 sync:
 	rsync -avz --delete -e "ssh -p 4242" \
-		~/Desktop/Inception/ \
-		mregrag@10.13.100.150:/home/mregrag/Desktop/Inception/
+		~/Desktop/Inception42/ \
+		mohamed@10.13.100.198:/home/mohamed/Desktop/Inception/
 
 push:
-	scp -P 4242 -r /Users/mregrag/Desktop/Inception/ mregrag@10.13.100.150:/home/mregrag/Desktop
+	scp -P 4242 -r /Users/mregrag/Desktop/Inception42/ mohamed@10.13.100.198:/home/mohamed/Desktop
 
 re: fclean up
