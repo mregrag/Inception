@@ -14,7 +14,5 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 COPY ./tools/setup.sh /usr/local/bin/setup.sh
 RUN chmod +x /usr/local/bin/setup.sh
 
-EXPOSE 9000
-
 ENTRYPOINT ["/usr/local/bin/setup.sh"]
 

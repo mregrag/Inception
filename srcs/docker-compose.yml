@@ -13,6 +13,9 @@ services:
       - wordpress
     env_file:
       - .env
+    secrets:
+      - nginx_cert
+      - nginx_key
     restart: always
 
   wordpress:
@@ -95,6 +98,23 @@ services:
     depends_on:
       - mariadb
     restart: always
+  
+  portainer:
+    container_name: portainer
+    build:
+      context: ./requirements/bonus/portainer
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - portainer_data:/data
+    networks:
+      - inception
+    ports:
+      - "9000:9000"
+    env_file:
+      - .env
+    secrets:
+      - portainer_admin_password
+    restart: always
 
 networks:
   inception:
@@ -113,6 +133,12 @@ volumes:
       type: none
       device: /home/${USER}/data/mariadb
       o: bind
+  portainer_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/${USER}/data/portainer
+      o: bind
 
 secrets:
   db_password:
@@ -125,3 +151,9 @@ secrets:
     file: ../secrets/wp_user_password.txt
   ftp_password:
     file: ../secrets/ftp_password.txt
+  nginx_cert:
+    file: ../secrets/ssl/nginx.crt
+  nginx_key:
+    file: ../secrets/ssl/nginx.key
+  portainer_admin_password:
+    file: ../secrets/portainer_admin_password.txt

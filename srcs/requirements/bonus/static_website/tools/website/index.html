@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mregrag - Developer Portfolio</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">MR</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+            </ul>
+            <div class="theme-toggle" id="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </div>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>Hello, I'm <span class="highlight">Mregrag</span></h1>
+            <h2>Full-Stack Developer</h2>
+            <p>Building elegant solutions with code</p>
+            <div class="cta-buttons">
+                <a href="#projects" class="btn primary">View Projects</a>
+                <a href="#contact" class="btn secondary">Contact Me</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <h2>About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>I'm a passionate developer specializing in creating robust and scalable web applications. With a focus on containerization and DevOps, I build solutions that are not just functional but also maintainable and efficient.</p>
+                    <p>My journey in tech began at 42 School, where I honed my problem-solving skills through peer learning and hands-on projects. I believe in continuous learning and adapting to new technologies.</p>
+                </div>
+                <div class="about-image">
+                    <div class="image-container">
+                        <!-- Placeholder for profile image -->
+			<img src="https://cdn.intra.42.fr/users/08ee19ff5e4cc4d8393cf1a77dd05467/mregrag.jpg" alt="Mregrag profile photo" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="profile-placeholder">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="skills">
+        <div class="container">
+            <h2>My Skills</h2>
+            <div class="skills-container">
+                <div class="skill-category">
+                    <h3>Backend</h3>
+                    <div class="skill-items">
+                        <div class="skill-item"><i class="fab fa-node-js"></i> Node.js</div>
+                        <div class="skill-item"><i class="fab fa-python"></i> Python</div>
+                        <div class="skill-item"><i class="fas fa-database"></i> SQL</div>
+                        <div class="skill-item"><i class="fas fa-server"></i> Express</div>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>DevOps</h3>
+                    <div class="skill-items">
+                        <div class="skill-item"><i class="fab fa-docker"></i> Docker</div>
+                        <div class="skill-item"><i class="fab fa-git-alt"></i> Git</div>
+                        <div class="skill-item"><i class="fab fa-linux"></i> Linux</div>
+                        <div class="skill-item"><i class="fas fa-network-wired"></i> Networking</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2>Featured Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image placeholder"></div>
+                    <h3>Inception</h3>
+                    <p>A Docker infrastructure project featuring multiple containerized services including WordPress, MariaDB, and custom services.</p>
+                    <div class="project-tags">
+                        <span>Docker</span>
+                        <span>DevOps</span>
+                        <span>Nginx</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image placeholder"></div>
+                    <h3>ft_transcendence</h3>
+                    <p>Real-time multiplayer Pong game with chat functionality and user authentication.</p>
+                    <div class="project-tags">
+                        <span>React</span>
+                        <span>Node.js</span>
+                        <span>WebSockets</span>
+                    </div>
+                </div>
+		<div class="project-card">
+		    <div class="project-image placeholder">
+			<i class="fas fa-server"></i>
+		    </div>
+		    <h3>Webserv</h3>
+		    <p>A custom HTTP server implementation from scratch in C++. Handles multiple client connections, request parsing, and serves static and dynamic content.</p>
+		    <div class="project-tags">
+			<span>C++</span>
+			<span>HTTP</span>
+			<span>Networking</span>
+		    </div>
+		</div>
+	    </div>
+        </div>
+    </section>
+
+   
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Mregrag. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
