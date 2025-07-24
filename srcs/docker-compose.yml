@@ -51,7 +51,7 @@ services:
       - db_password
       - db_admin_password
     restart: always
-  
+
   redis:
     container_name: redis
     build:
@@ -98,7 +98,7 @@ services:
     depends_on:
       - mariadb
     restart: always
-  
+
   portainer:
     container_name: portainer
     build:
