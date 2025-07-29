@@ -27,9 +27,9 @@ logs:
 sync:
 	rsync -avz --delete -e "ssh -p 4242" \
 		~/Desktop/Inception42/ \
-		mregrag@10.13.100.137:/home/mregrag/Desktop/Inception/
+		mregrag@10.13.100.150:/home/mregrag/Desktop/Inception/
 
 push:
-	scp -P 4242 -r /Users/mregrag/Desktop/Inception42/ mregrag@10.13.100.137:/home/mregrag/Desktop
+	scp -P 4242 -r /Users/mregrag/Desktop/Inception42/ mregrag@10.13.100.150:/home/mregrag/Desktop
 
 re: fclean up
