@@ -2,6 +2,34 @@
 
 set -e
 
+for secret in db_password wp_admin_password wp_user_password; do
+    if [ ! -s "/run/secrets/$secret" ]; then
+        echo "Error: Secret file /run/secrets/$secret is missing or empty" >&2
+        exit 1
+    fi
+done
+
+# Check if required environment variables exist
+if [ -z "$MYSQL_DATABASE" ]; then
+    echo "ERROR: MYSQL_DATABASE is not set!" >&2
+    exit 1
+fi
+
+if [ -z "$MYSQL_USER" ]; then
+    echo "ERROR: MYSQL_USER is not set!" >&2
+    exit 1
+fi
+
+if [ -z "$MYSQL_SERVER" ]; then
+    echo "ERROR: MYSQL_SERVER is not set!" >&2
+    exit 1
+fi
+
+if [ -z "$DOMAIN_NAME" ]; then
+    echo "ERROR: DOMAIN_NAME is not set!" >&2
+    exit 1
+fi
+
 DB_PASSWORD=$(cat /run/secrets/db_password)
 WP_ADMIN_PASS=$(cat /run/secrets/wp_admin_password)
 WP_USER_PASS=$(cat /run/secrets/wp_user_password)
