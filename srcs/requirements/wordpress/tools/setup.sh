@@ -3,25 +3,24 @@
 set -e
 
 for secret in db_password wp_admin_password wp_user_password; do
-    if [ ! -s "/run/secrets/$secret" ]; then
-        echo "Error: Secret file /run/secrets/$secret is missing or empty" >&2
+    if [ ! -s "/run/secrets/$secret" ] || [ ! -r "/run/secrets/$secret" ]; then
+        echo "Error: Secret file /run/secrets/$secret is missing, empty, or not readable" >&2
         exit 1
     fi
 done
 
-# Check if required environment variables exist
-if [ -z "$MYSQL_DATABASE" ]; then
-    echo "ERROR: MYSQL_DATABASE is not set!" >&2
+if [ -z "$DB_NAME" ]; then
+    echo "ERROR: DB_NAME is not set!" >&2
     exit 1
 fi
 
-if [ -z "$MYSQL_USER" ]; then
-    echo "ERROR: MYSQL_USER is not set!" >&2
+if [ -z "$DB_USER" ]; then
+    echo "ERROR: DB_USER is not set!" >&2
     exit 1
 fi
 
-if [ -z "$MYSQL_SERVER" ]; then
-    echo "ERROR: MYSQL_SERVER is not set!" >&2
+if [ -z "$DB_SERVER" ]; then
+    echo "ERROR: DB_SERVER is not set!" >&2
     exit 1
 fi
 
@@ -38,10 +37,10 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
     wp core download --allow-root
 
     wp config create --allow-root \
-	--dbname=$MYSQL_DATABASE \
-	--dbuser=$MYSQL_USER \
+	--dbname=$DB_NAME \
+	--dbuser=$DB_USER \
 	--dbpass=$DB_PASSWORD \
-	--dbhost=$MYSQL_SERVER \
+	--dbhost=$DB_SERVER \
 	--path=/var/www/html
 
     wp core install --allow-root \

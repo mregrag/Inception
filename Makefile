@@ -10,6 +10,9 @@ all: up
 up: $(DATA_DIRS)
 	@docker-compose -f $(DOCKER_COMPOSE) up -d --build
 
+$(DATA_DIRS):
+	@mkdir -p $@
+
 down:
 	@docker-compose -f $(DOCKER_COMPOSE) down
 
@@ -17,11 +20,12 @@ build:
 	@docker-compose -f $(DOCKER_COMPOSE) build
 
 clean: down
-	@docker-compose -f $(DOCKER_COMPOSE) down -v --remove-orphans
+	@docker-compose -f $(DOCKER_COMPOSE) down -v --rmi all --remove-orphans
+	@docker image prune -f
 
 fclean: clean
-	@docker system prune -a -f
 	@sudo rm -rf /home/$(USER)/data
+	@docker image prune -a -f
 
 ps:
 	@docker-compose -f $(DOCKER_COMPOSE) ps
@@ -29,15 +33,13 @@ ps:
 logs:
 	@docker-compose -f $(DOCKER_COMPOSE) logs
 
-$(DATA_DIRS):
-	@mkdir -p $@
 
 sync:
 	rsync -avz --delete -e "ssh -p 4242" \
 		~/Desktop/Inception/ \
-		$(USER)@10.13.100.122:/home/$(USER)/Desktop/Inception/
+		$(USER)@10.13.100.235:/home/$(USER)/Desktop/Inception/
 
 push:
-	scp -P 4242 -r ~/Desktop/Inception/ $(USER)@10.13.100.122:/home/$(USER)/Desktop
+	scp -P 4242 -r ~/Desktop/Inception/ $(USER)@10.13.100.235:/home/$(USER)/Desktop
 
 re: fclean up

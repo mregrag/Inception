@@ -7,4 +7,4 @@ cp /run/secrets/nginx_key /etc/nginx/ssl/nginx.key
 chmod 600 /etc/nginx/ssl/nginx.key #private
 chmod 644 /etc/nginx/ssl/nginx.crt #public
 
-exec "$@"
+exec nginx -g "daemon off;"

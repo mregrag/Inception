@@ -7,8 +7,7 @@ RUN mkdir -p /etc/nginx/ssl
 COPY ./conf/nginx.conf /etc/nginx/conf.d/default.conf
 
 
-COPY ./tools/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY ./tools/setup.sh /usr/local/bin/setup.sh
+RUN chmod +x /usr/local/bin/setup.sh
 
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/usr/local/bin/setup.sh"]
