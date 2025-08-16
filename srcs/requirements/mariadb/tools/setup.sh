@@ -2,22 +2,11 @@
 
 set -e
 
-if [ ! -s "/run/secrets/db_password" ] || [ ! -r "/run/secrets/db_password" ]; then
-    echo "Error: Database password secret file is missing, empty, or not readable" >&2
-    exit 1
-fi
-
-if [ -z "$DB_NAME" ]; then
-    echo "Error: DB_NAME is not set or empty" >&2
-    exit 1
-fi
-
-if [ -z "$DB_USER" ]; then
-    echo "Error: DB_USER is not set or empty" >&2
-    exit 1
-fi
-
 DB_PASSWORD=$(cat /run/secrets/db_password)
+
+: "${DB_NAME:?DB_NAME is not set}"
+: "${DB_USER:?DB_USER is not set}"
+: "${DB_PASSWORD:?DB_PASSWORD is not set}"
 
 service mariadb start
 
@@ -36,4 +25,4 @@ mariadb -e "FLUSH PRIVILEGES;"
 
 service mariadb stop
 
-exec mysqld --bind-address=0.0.0.0 --port=3306 --user=mysql
+exec mariadbd --bind-address=0.0.0.0 --port=3306 --user=mysql

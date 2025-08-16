@@ -25,7 +25,7 @@ clean: down
 
 fclean: clean
 	@sudo rm -rf /home/$(USER)/data
-	@docker image prune -a -f
+	@docker system prune -a -f
 
 ps:
 	@docker-compose -f $(DOCKER_COMPOSE) ps
@@ -37,9 +37,9 @@ logs:
 sync:
 	rsync -avz --delete -e "ssh -p 4242" \
 		~/Desktop/Inception/ \
-		$(USER)@10.13.100.235:/home/$(USER)/Desktop/Inception/
+		$(USER)@10.13.100.137:/home/$(USER)/Desktop/Inception/
 
 push:
-	scp -P 4242 -r ~/Desktop/Inception/ $(USER)@10.13.100.235:/home/$(USER)/Desktop
+	scp -P 4242 -r ~/Desktop/Inception/ $(USER)@10.13.100.137:/home/$(USER)/Desktop
 
 re: fclean up

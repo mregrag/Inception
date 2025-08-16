@@ -1,135 +1,213 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mregrag - Developer Portfolio</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>mregrag - Developer Portfolio</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#60a5fa',  // blue-400
+                        secondary: '#9ca3af', // gray-400
+                        dark: {
+                            100: '#1f2937', // gray-800
+                            200: '#111827', // gray-900
+                            300: '#0f172a', // slate-900
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827;
+            color: #f3f4f6;
+        }
+
+        .skill-card {
+            background-color: #1f2937;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+    </style>
 </head>
+
 <body>
-    <header>
-        <nav>
-            <div class="logo">MR</div>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#projects">Projects</a></li>
-            </ul>
-            <div class="theme-toggle" id="theme-toggle">
-                <i class="fas fa-moon"></i>
+    <!-- Header/Nav -->
+    <header class="fixed w-full bg-dark-200/90 backdrop-blur-sm z-10 shadow-md shadow-black/20">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-primary">mregrag</a>
+
+            <div class="flex items-center space-x-6">
+                <nav class="hidden md:block">
+                    <ul class="flex space-x-8">
+                        <li><a href="#about" class="hover:text-primary transition">About</a></li>
+                        <li><a href="#skills" class="hover:text-primary transition">Skills</a></li>
+                    </ul>
+                </nav>
+
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-lg hover:bg-dark-100 transition">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
-        </nav>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-dark-200 shadow-lg">
+            <nav class="container mx-auto px-4 py-3">
+                <ul class="space-y-3">
+                    <li><a href="#about" class="block py-2 hover:text-primary transition">About</a></li>
+                    <li><a href="#skills" class="block py-2 hover:text-primary transition">Skills</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
-    <section id="home" class="hero">
-        <div class="container">
-            <h1>Hello, I'm <span class="highlight">Mregrag</span></h1>
-            <h2>Full-Stack Developer</h2>
-            <p>Building elegant solutions with code</p>
-            <div class="cta-buttons">
-                <a href="#projects" class="btn primary">View Projects</a>
-                <a href="#contact" class="btn secondary">Contact Me</a>
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 flex flex-col items-center justify-center text-center px-4">
+        <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-primary mb-6">
+            <img src="https://cdn.intra.42.fr/users/08ee19ff5e4cc4d8393cf1a77dd05467/mregrag.jpg" alt="mregrag"
+                class="w-full h-full object-cover">
+        </div>
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">Hello, I'm <span class="text-primary">mregrag</span></h1>
+        <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-8">
+            Software Developer specializing in creating elegant, efficient solutions to complex problems.
+        </p>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-dark-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-12 text-center">About Me</h2>
+            <div class="max-w-3xl mx-auto">
+                <p class="text-lg mb-6 text-gray-300">
+                    I'm a passionate developer with expertise in building web applications and software solutions.
+                    My journey in tech started with a curiosity about how things work, which evolved into a career
+                    creating elegant code solutions.
+                </p>
+                <p class="text-lg text-gray-300">
+                    I focus on writing clean, maintainable code and stay up-to-date with the latest technologies
+                    and best practices. I enjoy solving complex problems and turning ideas into functional,
+                    user-friendly applications.
+                </p>
             </div>
         </div>
     </section>
 
-    <section id="about" class="about">
-        <div class="container">
-            <h2>About Me</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <p>I'm a passionate developer specializing in creating robust and scalable web applications. With a focus on containerization and DevOps, I build solutions that are not just functional but also maintainable and efficient.</p>
-                    <p>My journey in tech began at 42 School, where I honed my problem-solving skills through peer learning and hands-on projects. I believe in continuous learning and adapting to new technologies.</p>
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 bg-dark-200">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-12 text-center">My Skills</h2>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                <div class="flex flex-col items-center p-6 skill-card rounded-lg shadow">
+                    <i class="fab fa-linux text-3xl text-blue-400 mb-4"></i>
+                    <h3 class="font-medium">Linux</h3>
                 </div>
-                <div class="about-image">
-                    <div class="image-container">
-                        <!-- Placeholder for profile image -->
-			<img src="https://cdn.intra.42.fr/users/08ee19ff5e4cc4d8393cf1a77dd05467/mregrag.jpg" alt="Mregrag profile photo" style="width: 100%; height: 100%; object-fit: cover;">
-                        <div class="profile-placeholder">
-                            <i class="fas fa-user"></i>
-                        </div>
-                    </div>
+
+                <div class="flex flex-col items-center p-6 skill-card rounded-lg shadow">
+                    <i class="fab fa-node text-3xl text-green-400 mb-4"></i>
+                    <h3 class="font-medium">Node.js</h3>
+                </div>
+
+                <div class="flex flex-col items-center p-6 skill-card rounded-lg shadow">
+                    <i class="fas fa-code text-3xl text-purple-400 mb-4"></i>
+                    <h3 class="font-medium">C</h3>
+                </div>
+
+                <div class="flex flex-col items-center p-6 skill-card rounded-lg shadow">
+                    <i class="fas fa-file-code text-3xl text-orange-400 mb-4"></i>
+                    <h3 class="font-medium">C++</h3>
+                </div>
+
+                <div class="flex flex-col items-center p-6 skill-card rounded-lg shadow">
+                    <i class="fab fa-git-alt text-3xl text-red-400 mb-4"></i>
+                    <h3 class="font-medium">Git</h3>
+                </div>
+
+                <div class="flex flex-col items-center p-6 skill-card rounded-lg shadow">
+                    <i class="fab fa-docker text-3xl text-blue-400 mb-4"></i>
+                    <h3 class="font-medium">Docker</h3>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="skills" class="skills">
-        <div class="container">
-            <h2>My Skills</h2>
-            <div class="skills-container">
-                <div class="skill-category">
-                    <h3>Backend</h3>
-                    <div class="skill-items">
-                        <div class="skill-item"><i class="fab fa-node-js"></i> Node.js</div>
-                        <div class="skill-item"><i class="fab fa-python"></i> Python</div>
-                        <div class="skill-item"><i class="fas fa-database"></i> SQL</div>
-                        <div class="skill-item"><i class="fas fa-server"></i> Express</div>
-                    </div>
-                </div>
-                <div class="skill-category">
-                    <h3>DevOps</h3>
-                    <div class="skill-items">
-                        <div class="skill-item"><i class="fab fa-docker"></i> Docker</div>
-                        <div class="skill-item"><i class="fab fa-git-alt"></i> Git</div>
-                        <div class="skill-item"><i class="fab fa-linux"></i> Linux</div>
-                        <div class="skill-item"><i class="fas fa-network-wired"></i> Networking</div>
-                    </div>
-                </div>
+    <!-- Footer -->
+    <footer class="bg-dark-300 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex justify-center space-x-6 mb-4">
+                <a href="#" class="text-gray-400 hover:text-primary transition">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-primary transition">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-primary transition">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-primary transition">
+                    <i class="fas fa-envelope"></i>
+                </a>
             </div>
-        </div>
-    </section>
-
-    <section id="projects" class="projects">
-        <div class="container">
-            <h2>Featured Projects</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-image placeholder"></div>
-                    <h3>Inception</h3>
-                    <p>A Docker infrastructure project featuring multiple containerized services including WordPress, MariaDB, and custom services.</p>
-                    <div class="project-tags">
-                        <span>Docker</span>
-                        <span>DevOps</span>
-                        <span>Nginx</span>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-image placeholder"></div>
-                    <h3>ft_transcendence</h3>
-                    <p>Real-time multiplayer Pong game with chat functionality and user authentication.</p>
-                    <div class="project-tags">
-                        <span>React</span>
-                        <span>Node.js</span>
-                        <span>WebSockets</span>
-                    </div>
-                </div>
-		<div class="project-card">
-		    <div class="project-image placeholder">
-			<i class="fas fa-server"></i>
-		    </div>
-		    <h3>Webserv</h3>
-		    <p>A custom HTTP server implementation from scratch in C++. Handles multiple client connections, request parsing, and serves static and dynamic content.</p>
-		    <div class="project-tags">
-			<span>C++</span>
-			<span>HTTP</span>
-			<span>Networking</span>
-		    </div>
-		</div>
-	    </div>
-        </div>
-    </section>
-
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Mregrag. All rights reserved.</p>
+            <p class="text-gray-500">© 2025 mregrag. All rights reserved.</p>
         </div>
     </footer>
 
-    <script src="js/script.js"></script>
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', function () {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Hide mobile menu when clicking a link
+        const mobileLinks = document.querySelectorAll('#mobile-menu a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', function () {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
+
 </html>

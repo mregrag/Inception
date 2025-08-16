@@ -1,6 +1,7 @@
 services:
   nginx:
     container_name: nginx
+    image: nginx:42
     build:
       context: ./requirements/nginx
     ports:
@@ -20,6 +21,7 @@ services:
 
   wordpress:
     container_name: wordpress
+    image: wordpress:42
     build:
       context: ./requirements/wordpress
     volumes:
@@ -39,6 +41,7 @@ services:
 
   mariadb:
     container_name: mariadb
+    image: mariadb:42
     build:
       context: ./requirements/mariadb
     volumes:
@@ -54,6 +57,7 @@ services:
 
   redis:
     container_name: redis
+    image: redis:42
     build:
       context: ./requirements/bonus/redis
     networks:
@@ -62,6 +66,7 @@ services:
 
   ftp:
     container_name: ftp
+    image: ftp:42
     build:
       context: ./requirements/bonus/ftp
     volumes:
@@ -79,6 +84,7 @@ services:
 
   static_website:
     container_name: static_website
+    image: website:42
     build:
       context: ./requirements/bonus/static_website
     networks:
@@ -89,6 +95,7 @@ services:
 
   adminer:
     container_name: adminer
+    image: adminer:42
     build:
       context: ./requirements/bonus/adminer
     ports:
@@ -101,6 +108,7 @@ services:
 
   portainer:
     container_name: portainer
+    image: portainer:42
     build:
       context: ./requirements/bonus/portainer
     volumes:
