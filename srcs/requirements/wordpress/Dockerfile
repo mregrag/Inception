@@ -1,7 +1,7 @@
 FROM debian:bullseye
 
 RUN apt-get update  -y && \
-    apt-get install -y curl php php-fpm php-mysql mariadb-client && \
+    apt-get install -y curl php php-fpm php-mysql && \
     mkdir -p /run/php && \
     sed -i 's|listen = .*|listen = 9000|' /etc/php/*/fpm/pool.d/www.conf
 
