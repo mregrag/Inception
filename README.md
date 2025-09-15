@@ -1,9 +1,9 @@
 # Inception (42 Project)
 
-## 📌 Introduction
+## Introduction
 **Inception** is a DevOps project that sets up a multi-container infrastructure using **Docker** and **Docker Compose**
 
-## 🚀 Features
+## Features
 - Containerized setup using **Docker Compose**
 - **NGINX** with TLS (self-signed certificate)
 - **WordPress** with PHP-FPM
