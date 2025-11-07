@@ -1,17 +1,21 @@
-FROM debian:bullseye
+FROM debian:bookworm
 
-RUN apt-get update  -y && \
-    apt-get install -y curl php php-fpm php-mysql && \
-    mkdir -p /run/php && \
-    sed -i 's|listen = .*|listen = 9000|' /etc/php/*/fpm/pool.d/www.conf
+RUN apt-get update && apt-get install -y php-fpm php-mysqli curl mariadb-client
+
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+    && chmod +x wp-cli.phar \
+    && mv wp-cli.phar /usr/local/bin/wp
+
+RUN sed -i 's|listen = .*|listen = 9000|' /etc/php/8.2/fpm/pool.d/www.conf
+
+COPY ./tools/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+RUN mkdir -p /var/www/html
 
 WORKDIR /var/www/html
 
-RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
-    chmod +x wp-cli.phar && \
-    mv wp-cli.phar /usr/local/bin/wp
+ENTRYPOINT ["docker-entrypoint.sh"]
 
-COPY ./tools/setup.sh /usr/local/bin/setup.sh
-RUN chmod +x /usr/local/bin/setup.sh
-
-ENTRYPOINT ["/usr/local/bin/setup.sh"]
+CMD ["php-fpm8.2", "-F"]

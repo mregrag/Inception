@@ -1,45 +1,30 @@
 DOCKER_COMPOSE = srcs/docker-compose.yml
-USER ?= $(shell whoami)
+DATA_PATH = /home/mregrag/data
 
-DATA_DIRS = /home/$(USER)/data/wordpress \
-						/home/$(USER)/data/mariadb \
-						/home/$(USER)/data/portainer
-
-all: up
-
-up: $(DATA_DIRS)
-	@docker-compose -f $(DOCKER_COMPOSE) up -d --build
-
-$(DATA_DIRS):
-	@mkdir -p $@
-
-down:
-	@docker-compose -f $(DOCKER_COMPOSE) down
+all: build
 
 build:
-	@docker-compose -f $(DOCKER_COMPOSE) build
-
-clean: down
-	@docker-compose -f $(DOCKER_COMPOSE) down -v --rmi all --remove-orphans
-	@docker image prune -f
-
-fclean: clean
-	@sudo rm -rf /home/$(USER)/data
-	@docker system prune -a -f
-
+	@docker compose -f $(DOCKER_COMPOSE) up --build -d
+start:
+	@docker compose -f $(DOCKER_COMPOSE) start
+stop:
+	@docker compose -f $(DOCKER_COMPOSE) stop
 ps:
-	@docker-compose -f $(DOCKER_COMPOSE) ps
-
+	@docker compose -f $(DOCKER_COMPOSE) ps
 logs:
-	@docker-compose -f $(DOCKER_COMPOSE) logs
+	@docker compose -f $(DOCKER_COMPOSE) logs
+clean: stop
+	@docker compose -f $(DOCKER_COMPOSE) down -v
+fclean: clean
+	@docker system prune -af
+	@rm -rf $(DATA_PATH)
 
-
-sync:
-	rsync -avz --delete -e "ssh -p 4242" \
-		~/Desktop/Inception/ \
-		$(USER)@10.13.100.137:/home/$(USER)/Desktop/Inception/
+restart: stop start
 
 push:
-	scp -P 4242 -r ~/Desktop/Inception/ $(USER)@10.13.100.137:/home/$(USER)/Desktop
+	scp -P 4242 -r ~/Desktop/Inception/ $(USER)@10.11.100.223:/home/$(USER)/Inception
 
-re: fclean up
+push_vm:
+	scp  -r ~/Desktop/INC mregrag@148.100.79.175:/home/mregrag/Inception
+
+re: fclean build

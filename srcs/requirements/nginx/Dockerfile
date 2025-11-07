@@ -1,13 +1,17 @@
-FROM debian:bullseye
+FROM debian:bookworm
 
-RUN apt-get update -y && apt-get install -y nginx openssl
+RUN apt-get update && apt-get install -y nginx
 
-RUN mkdir -p /etc/nginx/ssl
+COPY ./conf/wordpress.conf /etc/nginx/sites-available/wordpress.conf
 
-COPY ./conf/wordpress.conf /etc/nginx/sites-available/
-RUN ln -s /etc/nginx/sites-available/wordpress.conf /etc/nginx/sites-enabled/wordpress.conf
+RUN rm -f /etc/nginx/sites-enabled/default
 
-COPY ./tools/setup.sh /usr/local/bin/setup.sh
-RUN chmod +x /usr/local/bin/setup.sh
+RUN ln -s /etc/nginx/sites-available/wordpress.conf /etc/nginx/sites-enabled/default
 
-ENTRYPOINT ["/usr/local/bin/setup.sh"]
+COPY ./tools/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+CMD ["nginx", "-g", "daemon off;"]

@@ -1,10 +1,9 @@
-FROM debian:bullseye
+FROM debian:bookworm
 
 RUN apt-get update -y && apt-get install -y curl php php-mysqli
 
-RUN mkdir -p /var/www/html && \
-    curl -sSL "https://www.adminer.org/latest.php" -o /var/www/html/adminer.php
+RUN mkdir -p /var/www/adminer
 
-CMD ["php", "-S", "0.0.0.0:8080", "-t", "/var/www/html"]
+RUN curl -sSL "https://www.adminer.org/latest.php" -o /var/www/adminer/index.php
 
-ENTRYPOINT ["php", "-S", "0.0.0.0:8080", "-t", "/var/www/html"]
+CMD ["php", "-S", "0.0.0.0:9090", "-t", "/var/www/adminer"]

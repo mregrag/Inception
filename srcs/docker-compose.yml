@@ -1,167 +1,133 @@
 services:
-  nginx:
-    container_name: nginx
-    image: nginx:42
-    build:
-      context: ./requirements/nginx
-    ports:
-      - "443:443"
-    volumes:
-      - wordpress_data:/var/www/html
-    networks:
-      - inception
-    depends_on:
-      - wordpress
-    env_file:
-      - .env
-    secrets:
-      - nginx_cert
-      - nginx_key
-    restart: always
+    mariadb:
+        container_name: mariadb
+        image: mariadb:42
+        build:
+            context: ./requirements/mariadb
+        volumes:
+            - /home/mregrag/data/db:/var/lib/mysql
+        networks:
+            - inception
+        env_file:
+            - .env
+        secrets:
+            - db_user_password
+            - db_root_password
+        restart: always
 
-  wordpress:
-    container_name: wordpress
-    image: wordpress:42
-    build:
-      context: ./requirements/wordpress
-    volumes:
-      - wordpress_data:/var/www/html
-    networks:
-      - inception
-    depends_on:
-      - mariadb
-      - redis
-    env_file:
-      - .env
-    secrets:
-      - db_password
-      - wp_admin_password
-      - wp_user_password
-    restart: always
+    wordpress:
+        container_name: wordpress
+        image: wordpress:42
+        build:
+            context: ./requirements/wordpress
+        volumes:
+            - /home/mregrag/data/wordpress:/var/www/html
+        networks:
+            - inception
+        depends_on:
+            - mariadb
+            - redis
+        env_file:
+            - .env
+        secrets:
+            - db_user_password
+            - wp_user_password
+            - wp_admin_password
+            - redis_password
+        restart: always
 
-  mariadb:
-    container_name: mariadb
-    image: mariadb:42
-    build:
-      context: ./requirements/mariadb
-    volumes:
-      - mariadb_data:/var/lib/mysql
-    networks:
-      - inception
-    env_file:
-      - .env
-    secrets:
-      - db_password
-      - db_admin_password
-    restart: always
+    nginx:
+        container_name: nginx
+        image: nginx:42
+        build:
+            context: ./requirements/nginx
+        volumes:
+            - /home/mregrag/data/wordpress:/var/www/html
+        networks:
+            - inception
+        depends_on:
+            - mariadb
+        ports:
+            - "443:443"
+        env_file:
+            - .env
+        secrets:
+            - nginx_cert
+            - nginx_key
+        restart: always
 
-  redis:
-    container_name: redis
-    image: redis:42
-    build:
-      context: ./requirements/bonus/redis
-    networks:
-      - inception
-    restart: always
+    adminer:
+        container_name: adminer
+        image: adminer:42
+        build:
+            context: ./requirements/bonus/adminer
+        networks:
+            - inception
+        depends_on:
+            - mariadb
+        ports:
+            - "9090:9090"
+        env_file:
+            - .env
+        secrets:
+            - nginx_cert
+            - nginx_key
+        restart: always
 
-  ftp:
-    container_name: ftp
-    image: ftp:42
-    build:
-      context: ./requirements/bonus/ftp
-    volumes:
-      - wordpress_data:/var/www/html
-    networks:
-      - inception
-    ports:
-      - "21:21"
-      - "21000-21010:21000-21010"
-    env_file:
-      - .env
-    secrets:
-      - ftp_password
-    restart: always
+    redis:
+        container_name: redis
+        image: redis:42
+        build:
+            context: ./requirements/bonus/redis
+        networks:
+            - inception
+        volumes:
+            - /home/mregrag/data/redis:/var/lib/redis 
+        secrets:
+            - redis_acl
+        restart: always
 
-  static_website:
-    container_name: static_website
-    image: website:42
-    build:
-      context: ./requirements/bonus/static_website
-    networks:
-      - inception
-    ports:
-      - "8081:80"
-    restart: always
-
-  adminer:
-    container_name: adminer
-    image: adminer:42
-    build:
-      context: ./requirements/bonus/adminer
-    ports:
-      - "8080:8080"
-    networks:
-      - inception
-    depends_on:
-      - mariadb
-    restart: always
-
-  portainer:
-    container_name: portainer
-    image: portainer:42
-    build:
-      context: ./requirements/bonus/portainer
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - portainer_data:/data
-    networks:
-      - inception
-    ports:
-      - "9000:9000"
-    env_file:
-      - .env
-    secrets:
-      - portainer_admin_password
-    restart: always
+    ftp:
+        container_name: ftp
+        image: ftp:42
+        build:
+            context: ./requirements/bonus/ftp
+        volumes:
+            - /home/mregrag/data/wordpress:/var/www/html
+        networks:
+            - inception
+        depends_on:
+            - wordpress
+        ports:
+            - "21:21"
+            - "21000-21010:21000-21010"
+        env_file:
+            - .env
+        secrets:
+            - ftp_user_password
+        restart: always
 
 networks:
-  inception:
-    driver: bridge
-
-volumes:
-  wordpress_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: /home/${USER}/data/wordpress
-      o: bind
-  mariadb_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: /home/${USER}/data/mariadb
-      o: bind
-  portainer_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: /home/${USER}/data/portainer
-      o: bind
+    inception:
+        name: inception_net
+        driver: bridge
 
 secrets:
-  db_password:
-    file: ../secrets/db_password.txt
-  db_admin_password:
-    file: ../secrets/db_admin_password.txt
-  wp_admin_password:
-    file: ../secrets/wp_admin_password.txt
-  wp_user_password:
-    file: ../secrets/wp_user_password.txt
-  ftp_password:
-    file: ../secrets/ftp_password.txt
-  nginx_cert:
-    file: ../secrets/ssl/nginx.crt
-  nginx_key:
-    file: ../secrets/ssl/nginx.key
-  portainer_admin_password:
-    file: ../secrets/portainer_admin_password.txt
+    db_user_password:
+        file: ../secrets/db_user_password.txt
+    db_root_password:
+        file: ../secrets/db_root_password.txt
+    wp_admin_password:
+        file: ../secrets/wp_admin_password.txt
+    wp_user_password:
+        file: ../secrets/wp_user_password.txt
+    ftp_user_password:
+        file: ../secrets/ftp_user_password.txt
+    redis_password:
+        file: ../secrets/redis_password.txt
+    redis_acl:
+        file: ../secrets/redis_users.acl
+    nginx_cert:
+        file: ../secrets/ssl/nginx_cert.txt
+    nginx_key:
+        file: ../secrets/ssl/nginx_key.txt
