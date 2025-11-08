@@ -107,6 +107,24 @@ services:
             - ftp_user_password
         restart: always
 
+    portainer:
+        container_name: portainer
+        image: portainer:42
+        build:
+            context: ./requirements/bonus/portainer
+        volumes:
+            - /home/mregrag/data/portainer:/data
+            - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+            - inception
+        ports:
+            - "9000:9000"
+        env_file:
+            - .env
+        secrets:
+            - portainer_admin_password
+        restart: always
+
 networks:
     inception:
         name: inception_net
@@ -127,6 +145,8 @@ secrets:
         file: ../secrets/redis_password.txt
     redis_acl:
         file: ../secrets/redis_users.acl
+    portainer_admin_password:
+        file: ../secrets/portainer_admin_password.txt
     nginx_cert:
         file: ../secrets/ssl/nginx_cert.txt
     nginx_key:
