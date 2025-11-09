@@ -46,7 +46,7 @@ services:
         networks:
             - inception
         depends_on:
-            - mariadb
+            - wordpress
         ports:
             - "443:443"
         env_file:
@@ -119,11 +119,24 @@ services:
             - inception
         ports:
             - "9000:9000"
+            - "9443:9443"
         env_file:
             - .env
         secrets:
             - portainer_admin_password
         restart: always
+      
+    website:
+        container_name: website
+        image: website:42
+        build:
+            context: ./requirements/bonus/website
+        networks:
+            - inception
+        ports:
+            - "8080:80"
+        restart: always
+  
 
 networks:
     inception:

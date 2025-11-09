@@ -2,8 +2,6 @@
 
 set -e
 
-DATA_DIR="/var/lib/mysql"
-
 DB_USER_PASSWORD=$(cat /run/secrets/db_user_password)
 DB_ROOT_PASSWORD=$(cat /run/secrets/db_root_password)
 
@@ -20,7 +18,7 @@ if [ -z "$DB_ROOT_PASSWORD" ]; then
     exit 1
 fi
 
-if [ ! -d "$DATA_DIR/mysql" ]; then
+if [ ! -d "/var/lib/mysql" ]; then
 
     echo "Initializing database volume"
 
@@ -51,4 +49,4 @@ fi
 
 echo "Starting MariaDB in foreground"
 
-exec mysqld_safe --user=mysql --bind-address=0.0.0.0
+exec "$@"

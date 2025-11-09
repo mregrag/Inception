@@ -1,17 +1,15 @@
-FROM debian:bookworm
+FROM debian:bookworm-slim 
 
-RUN apt-get update && apt-get install -y nginx
+RUN apt-get update && apt-get install -y nginx 
 
 COPY ./conf/wordpress.conf /etc/nginx/sites-available/wordpress.conf
 
-RUN rm -f /etc/nginx/sites-enabled/default
-
-RUN ln -s /etc/nginx/sites-available/wordpress.conf /etc/nginx/sites-enabled/default
+RUN rm -f /etc/nginx/sites-enabled/default \
+    && ln -s /etc/nginx/sites-available/wordpress.conf /etc/nginx/sites-enabled/wordpress.conf
 
 COPY ./tools/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 CMD ["nginx", "-g", "daemon off;"]

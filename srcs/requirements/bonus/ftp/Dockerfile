@@ -1,4 +1,4 @@
-FROM debian:bookworm
+FROM debian:bookworm-slim 
 
 RUN apt-get update && apt-get install -y vsftpd
 
@@ -6,9 +6,8 @@ COPY ./conf/vsftpd.conf /etc/vsftpd.conf
 
 COPY ./tools/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
-RUN mkdir -p /var/run/vsftpd/empty
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh \
+    && mkdir -p /var/run/vsftpd/empty
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
