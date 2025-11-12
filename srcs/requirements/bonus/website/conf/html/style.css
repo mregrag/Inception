@@ -1,22 +1,153 @@
+:root {
+    --primary-color: #00bcd4;    
+    --background-dark: #121212;  
+    --surface-dark: #1e1e1e;     
+    --text-light: #f0f0f0;       
+    --text-subtle: #777;         
+    --border-subtle: #333;       
+    --font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; 
+}
+
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f0f0;
-    color: #004;
-    text-align: center;
-    padding-top: 50px;
-}
-h1 {
-    color: #4CAF50; /* Green */
-}
-main {
-    background: #fff;
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-ul {
-    list-style-type: none;
+    font-family: var(--font-family);
+    line-height: 1.6;
+    margin: 0;
     padding: 0;
+    background-color: var(--background-dark);
+    color: var(--text-light);
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 40px; /* Increased side padding for cleaner look */
+}
+
+.hero {
+    background-color: var(--background-dark); /* Keep hero area the same background as body */
+    color: var(--text-light);
+    padding: 60px 20px 40px; /* Reduced vertical padding */
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-picture {
+    width: 140px; /* Slightly smaller */
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--primary-color); /* Thinner accent border */
+    margin-bottom: 25px;
+}
+
+.hero h1 {
+    font-size: 3em; /* Slightly smaller name */
+    margin: 0 0 5px 0;
+    font-weight: 600; /* Less bold */
+}
+
+.tagline {
+    font-size: 1.1em;
+    color: var(--text-subtle); /* Make the tagline subtler */
+    margin-bottom: 30px;
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: var(--background-dark);
+    text-decoration: none;
+    padding: 8px 20px; /* Smaller button */
+    border-radius: 2px; /* Sharper corners */
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: background-color 0.3s;
+}
+
+.cta-button:hover {
+    background-color: #00e5ff;
+}
+
+.section {
+    padding: 30px 0; /* More space around sections */
+}
+
+h2 {
+    color: var(--text-light); /* Make headers white for contrast */
+    font-size: 1.6em; /* Smaller, cleaner header size */
+    border-bottom: 1px solid var(--border-subtle); /* Very thin, subtle separator line */
+    padding-bottom: 5px;
+    margin-bottom: 25px;
+    display: block; /* Make it full width for alignment */
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 2px; /* Increased letter spacing for a modern look */
+}
+
+hr {
+    display: none; /* Rely only on section spacing and subtle headings */
+}
+
+.skills-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.skills-list li {
+    background-color: var(--surface-dark);
+    color: var(--text-light);
+    padding: 6px 12px;
+    border-radius: 2px;
+    font-size: 0.85em;
+    border: 1px solid var(--border-subtle);
+    font-weight: 300; /* Lighter font weight */
+}
+
+.skills-list li:hover {
+    background-color: var(--primary-color);
+    color: var(--background-dark);
+}
+
+.project-card {
+    background-color: var(--background-dark); /* Match body background */
+    padding: 15px 0; /* Minimal padding */
+    margin-bottom: 25px;
+    border-left: 3px solid var(--primary-color); /* Thinner accent line */
+    padding-left: 15px;
+    /* Remove shadow and hover effect for maximum simplicity */
+}
+
+.project-card h3 {
+    margin-top: 0;
+    font-size: 1.2em;
+    color: var(--text-light);
+}
+
+.project-card p {
+    color: var(--text-subtle);
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.project-link {
+    display: inline-block;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 0.9em;
+}
+
+.contact-links {
+    display: flex;
+    gap: 30px; /* More space between links */
+    margin-top: 20px;
+}
+
+.contact-links a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 400;
 }

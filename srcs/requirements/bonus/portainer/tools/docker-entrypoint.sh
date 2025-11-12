@@ -7,4 +7,4 @@ if [ -z "$ADMIN_PASSWORD" ]; then
     exit 1
 fi
 
-exec portainer-server --admin-password=ADMIN_PASSWORD
+exec portainer-server --admin-password="$ADMIN_PASSWORD"

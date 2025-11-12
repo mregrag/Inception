@@ -2,9 +2,10 @@ FROM debian:bookworm-slim
 
 RUN apt-get update  && apt-get install -y redis-server
 
-RUN \
-    sed -i 's/^bind 127.0.0.1 .*/bind 0.0.0.0/' /etc/redis/redis.conf \
-    && sed -i 's/^daemonize yes/daemonize no/' /etc/redis/redis.conf \
-    && echo "aclfile /run/secrets/redis_acl" >> /etc/redis/redis.conf
+COPY ./tools/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
-CMD ["redis-server", "/etc/redis/redis.conf"]
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+CMD ["redis-server"]

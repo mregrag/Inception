@@ -1,26 +1,32 @@
 DOCKER_COMPOSE = srcs/docker-compose.yml
 DATA_PATH = /home/mregrag/data
 
-all: prepare build
+all: build
 
-prepare:
+setup:
 	@mkdir -p $(DATA_PATH)/wordpress
 	@mkdir -p $(DATA_PATH)/mariadb
 	@mkdir -p $(DATA_PATH)/redis
 	@mkdir -p $(DATA_PATH)/portainer
 
-build:
+build: setup
 	@docker compose -f $(DOCKER_COMPOSE) up --build -d
+
 start:
 	@docker compose -f $(DOCKER_COMPOSE) start
+
 stop:
 	@docker compose -f $(DOCKER_COMPOSE) stop
+
 ps:
 	@docker compose -f $(DOCKER_COMPOSE) ps
+
 logs:
 	@docker compose -f $(DOCKER_COMPOSE) logs
+
 clean: stop
 	@docker compose -f $(DOCKER_COMPOSE) down -v
+
 fclean: clean
 	@docker system prune -af
 	@rm -rf $(DATA_PATH)

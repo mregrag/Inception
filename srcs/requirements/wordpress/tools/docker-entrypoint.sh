@@ -22,17 +22,15 @@ if [ -z "$REDIS_PASSWORD" ]; then echo "redis_password secret is empty"; exit 1;
 : "${WP_USER_EMAIL:?WP_USER_EMAIL needs to be set}"
 
 ADMIN_USER_LOWER=$(echo "$WP_ADMIN_USER" | tr '[:upper:]' '[:lower:]')
+
 if [[ "$ADMIN_USER_LOWER" == *"admin"* || "$ADMIN_USER_LOWER" == *"administrator"* ]]; then
-    echo "Invalid administrator username '$WP_ADMIN_USER' must not contain 'admin'"
+    echo "Invalid administrator '$WP_ADMIN_USER' must not contain 'admin'"
     exit 1
 fi
 
-echo "Waiting for MariaDB"
-while ! mysqladmin ping -h"$WP_DB_HOST" -u"$MYSQL_USER" -p"$DB_USER_PASSWORD" --silent; do
-	echo "MariaDB not ready"
-	sleep 2
+while ! mariadb-admin ping -h"$WP_DB_HOST" -u"$MYSQL_USER" -p"$DB_USER_PASSWORD" --silent; do
+    sleep 2
 done
-echo "MariaDB port is ready"
 
 if [ ! -f "wp-config.php" ]; then
 
@@ -43,7 +41,6 @@ if [ ! -f "wp-config.php" ]; then
         --dbuser="$MYSQL_USER" \
         --dbpass="$DB_USER_PASSWORD" \
         --dbhost="$WP_DB_HOST"
-
 
     wp core install --allow-root \
         --url="$DOMAIN_NAME" \
@@ -58,21 +55,17 @@ if [ ! -f "wp-config.php" ]; then
         --role=author \
         --user_pass="$WP_USER_PASSWORD"
 
-        wp theme install twentytwentyfour --activate --allow-root
+    wp theme install twentytwentyfour --activate --allow-root
 
-        wp config set WP_REDIS_HOST redis --allow-root
-        wp config set WP_REDIS_PORT 6379 --allow-root
-        wp config set WP_REDIS_PASSWORD "$REDIS_PASSWORD" --allow-root
-        wp config set WP_CACHE_KEY_SALT "$DOMAIN_NAME" --allow-root
-
-        wp plugin install redis-cache --activate --allow-root
-        wp redis enable --allow-root
-
-        echo "WordPress installation complete"
-
-else
-        echo "WordPress is already installed"
 fi
+
+wp config set WP_REDIS_HOST redis --allow-root
+wp config set WP_REDIS_PORT 6379 --allow-root
+wp config set WP_REDIS_PASSWORD "$REDIS_PASSWORD" --allow-root
+wp config set WP_CACHE_KEY_SALT "$DOMAIN_NAME" --allow-root
+
+wp plugin install redis-cache --activate --allow-root
+wp redis enable --allow-root
 
 chown -R www-data:www-data /var/www/html 
 chmod -R 775 /var/www/html

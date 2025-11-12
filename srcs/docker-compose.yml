@@ -84,7 +84,7 @@ services:
     volumes:
       - redis_data:/var/lib/redis 
     secrets:
-      - redis_acl
+      - redis_password
     restart: always
 
   ftp:
@@ -107,23 +107,25 @@ services:
       - ftp_user_password
     restart: always
 
-  portainer:
-    container_name: portainer
-    image: portainer:42
-    build:
-      context: ./requirements/bonus/portainer
+
+  cadvisor:
+    container_name: cadvisor
+    image: advisor:42
+    build: 
+      context: ./requirements/bonus/cadvisor
+    ports:
+      - "8080:8080"
     volumes:
-      - portainer_data:/data
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    privileged: true
+    devices:
+      - /dev/kmsg
     networks:
       - inception
-    ports:
-      - "9000:9000"
-      - "9443:9443"
-    env_file:
-      - .env
-    secrets:
-      - portainer_admin_password
     restart: always
 
   website:
@@ -134,7 +136,7 @@ services:
     networks:
       - inception
     ports:
-      - "8080:80"
+      - "2105:80"
     restart: always
 
 volumes:
@@ -142,9 +144,9 @@ volumes:
     name: wordpress
     driver: local
     driver_opts:
+      type: none
       device: /home/mregrag/data/wordpress
       o: bind
-      type: none
 
   mariadb_data:
     name: mariadb
@@ -188,8 +190,6 @@ secrets:
     file: ../secrets/ftp_user_password.txt
   redis_password:
     file: ../secrets/redis_password.txt
-  redis_acl:
-    file: ../secrets/redis_users.acl
   portainer_admin_password:
     file: ../secrets/portainer_admin_password.txt
   nginx_cert:
