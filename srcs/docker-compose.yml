@@ -1,9 +1,8 @@
 services:
   mariadb:
     container_name: mariadb
-    image: mariadb:42
-    build:
-      context: ./requirements/mariadb
+    image: mariadb:1337
+    build: ./requirements/mariadb
     volumes:
       - mariadb_data:/var/lib/mysql
     networks:
@@ -17,9 +16,8 @@ services:
 
   wordpress:
     container_name: wordpress
-    image: wordpress:42
-    build:
-      context: ./requirements/wordpress
+    image: wordpress:1337
+    build: ./requirements/wordpress
     volumes:
       - wordpress_data:/var/www/html
     networks:
@@ -38,9 +36,8 @@ services:
 
   nginx:
     container_name: nginx
-    image: nginx:42
-    build:
-      context: ./requirements/nginx
+    image: nginx:1337
+    build: ./requirements/nginx
     volumes:
       - wordpress_data:/var/www/html
     networks:
@@ -58,9 +55,8 @@ services:
 
   adminer:
     container_name: adminer
-    image: adminer:42
-    build:
-      context: ./requirements/bonus/adminer
+    image: adminer:1337
+    build: ./requirements/bonus/adminer
     networks:
       - inception
     depends_on:
@@ -76,9 +72,8 @@ services:
 
   redis:
     container_name: redis
-    image: redis:42
-    build:
-      context: ./requirements/bonus/redis
+    image: redis:1337
+    build: ./requirements/bonus/redis
     networks:
       - inception
     volumes:
@@ -89,9 +84,8 @@ services:
 
   ftp:
     container_name: ftp
-    image: ftp:42
-    build:
-      context: ./requirements/bonus/ftp
+    image: ftp:1337
+    build: ./requirements/bonus/ftp
     volumes:
       - wordpress_data:/var/www/html
     networks:
@@ -107,32 +101,25 @@ services:
       - ftp_user_password
     restart: always
 
-
-  cadvisor:
-    container_name: cadvisor
-    image: advisor:42
-    build: 
-      context: ./requirements/bonus/cadvisor
-    ports:
-      - "8080:8080"
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      - /dev/disk/:/dev/disk:ro
-    privileged: true
-    devices:
-      - /dev/kmsg
+  portainer:
+    container_name: portainer
+    image: portainer:1337
+    build: ./requirements/bonus/portainer
     networks:
       - inception
+    ports:
+      - "9000:9000"
+    secrets:
+      - portainer_admin_password
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
     restart: always
 
   website:
     container_name: website
-    image: website:42
-    build:
-      context: ./requirements/bonus/website
+    image: website:1337
+    build:  ./requirements/bonus/website
     networks:
       - inception
     ports:
